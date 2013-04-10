@@ -265,6 +265,15 @@ NSString	*gCustomBaseClassForced;
 			[names addObject:[attribute objectAttributeClassName]];
 	}
 	
+	NSDictionary *fetchedProperties = [self fetchedPropertiesByName];
+	
+	for (NSString *propertyName in fetchedProperties) {
+		NSFetchedPropertyDescription *fetchedProperty = [fetchedProperties objectForKey:propertyName];
+		NSString *className = [[[fetchedProperty fetchRequest] entity] managedObjectClassName];
+		if([className length])
+			[names addObject:className];
+	}
+	
 	return [[names allObjects] sortedArrayUsingSelector:@selector(compare:)];
 }
 
