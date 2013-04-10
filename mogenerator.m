@@ -277,6 +277,14 @@ NSString	*gCustomBaseClassForced;
 	return [[names allObjects] sortedArrayUsingSelector:@selector(compare:)];
 }
 
+- (BOOL)hasUUID {
+	return [[[self attributesByName] allKeys] containsObject:@"uuid"];
+}
+
+- (BOOL)hasNote {
+	return [[[self attributesByName] allKeys] containsObject:@"noteUUID"];
+}
+
 @end
 
 @implementation NSAttributeDescription (typing)

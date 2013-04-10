@@ -27,6 +27,7 @@
 - (void)_processPredicate:(NSPredicate*)predicate_ bindings:(NSMutableArray*)bindings_;
 - (NSArray*)prettyFetchRequests;
 - (NSSet *)classNameDeclarations;
+- (BOOL)hasUUID;
 @end
 
 @interface NSAttributeDescription (typing)
