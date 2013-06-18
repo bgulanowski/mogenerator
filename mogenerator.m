@@ -210,21 +210,23 @@ NSString	*gCustomBaseClassForced;
 			case NSVariableExpressionType: {
 				// TODO SHOULD Handle LHS keypaths.
                 
+				NSString *class = nil;
                 NSString *type = nil;
                 
                 NSAttributeDescription *attribute = [[self attributesByName] objectForKey:[lhs keyPath]];
                 if (attribute) {
-                    type = [attribute objectAttributeClassName];
+                    class = [attribute objectAttributeClassName];
                 } else {
-                    type = [self _resolveKeyPathType:[lhs keyPath]];
+                    class = [self _resolveKeyPathType:[lhs keyPath]];
                 }
-                type = [type stringByAppendingString:@"*"];
+                type = [class stringByAppendingString:@" *"];
                 // make sure that no repeated variables are entered here.
 				if (![self bindingsArray:bindings_ containsVariableNamed:[rhs variable]]) {
 					[bindings_ addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                      [rhs variable], @"name",
-                                      type, @"type",
-                                      nil]];
+										  [rhs variable], @"name",
+										  type, @"type",
+										  class, @"class",
+										  nil]];
 				}
 			} break;
 			default:
@@ -273,6 +275,11 @@ NSString	*gCustomBaseClassForced;
 		if([className length])
 			[names addObject:className];
 	}
+	
+	NSArray *fetchRequests = [self prettyFetchRequests];
+	
+	for (NSDictionary *req in fetchRequests)
+		[names addObjectsFromArray:[req valueForKeyPath:@"bindings.class"]];
 	
 	return [[names allObjects] sortedArrayUsingSelector:@selector(compare:)];
 }
